@@ -1,0 +1,116 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                              DOTFILES GITIGNORE                              ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ App Data & Electron Apps (changes frequently, not part of rice)             │
+# └──────────────────────────────────────────────────────────────────────────────┘
+discord/
+Discord/
+Vencord/
+VSCodium/
+app.yaak.desktop/
+Docker Desktop/
+Electron/
+GitHub Desktop/
+Google/
+Logseq/
+obsidian/
+Postman/
+qBittorrent/
+spotify/
+Thunar/
+xfce4/
+Excalidraw/
+com.pake.excalidraw/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ System/Session Data                                                          │
+# └──────────────────────────────────────────────────────────────────────────────┘
+dconf/
+pulse/
+session/
+systemd/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Cache & Generated Files                                                      │
+# └──────────────────────────────────────────────────────────────────────────────┘
+**/Cache/
+**/cache/
+**/CachedData/
+**/CachedExtensionVSIXs/
+**/Code Cache/
+**/GPUCache/
+**/DawnGraphiteCache/
+**/DawnWebGPUCache/
+**/Crashpad/
+**/*.log
+**/*.tmp
+**/blob_storage/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Sensitive Data                                                               │
+# └──────────────────────────────────────────────────────────────────────────────┘
+**/Cookies
+**/Cookies-journal
+**/*credentials*
+**/*tokens*
+**/*secret*
+**/Login Data
+**/Login Data-journal
+**/*.pem
+**/*.key
+**/DIPS
+**/DIPS-wal
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Browser Data                                                                 │
+# └──────────────────────────────────────────────────────────────────────────────┘
+mozilla/
+firefox/
+browsers/
+chromium/
+google-chrome/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Nested Git Repos (reinstallable via plugin managers)                        │
+# └──────────────────────────────────────────────────────────────────────────────┘
+# Tmux plugins - reinstall with: prefix + I (via tpm)
+tmux/plugins/
+
+# Spicetify themes with their own repos
+spicetify/Themes/*/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Misc App Data                                                                │
+# └──────────────────────────────────────────────────────────────────────────────┘
+act/
+htop/
+lazydocker/
+go/
+menus/
+nautilus/
+Unknown Organization/
+Blackmagic Design/
+Android Open Source Project/
+
+# RC files that change frequently
+baloofileinformationrc
+dolphinrc
+mimeapps.list
+pavucontrol.ini
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Fish shell generated files                                                   │
+# └──────────────────────────────────────────────────────────────────────────────┘
+fish/fish_variables
+fish/completions/
+fish/generated_completions/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ OBS (keep config, ignore recordings/profiles cache)                          │
+# └──────────────────────────────────────────────────────────────────────────────┘
+obs-studio/logs/
+obs-studio/crashes/
+obs-studio/plugin_config/
+obs-studio/profiler_data/

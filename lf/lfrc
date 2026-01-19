@@ -1,0 +1,281 @@
+# ----------------
+# GENERAL SETTINGS
+# ----------------
+
+set preview
+# set drawbox 
+set icons 
+set ignorecase
+set info size
+set ifs "\n"
+set filesep "\n"
+set dircounts
+set period 1
+
+# CTPV IMAGE PREVIEW
+# set previewer ctpv
+# set cleaner ctpvclear
+# &ctpv -s $id
+# &ctpvquit $id
+
+# CUSTOM SCRIPT FOR IMAGE PREVIEW
+# set previewer ~/.config/lf/scripts/preview
+# set cleaner ~/.config/lf/scripts/cleaner
+
+# KITTY IMAGE PREVIEW
+set previewer ~/.config/lf/scripts/lf_kitty_preview
+set cleaner ~/.config/lf/scripts/lf_kitty_clean
+
+# ----------------
+# CUSTOM FUNCTIONS
+# ----------------
+
+cmd open ${{
+    case $(file --mime-type "$f" -bL) in
+        text/*|application/json) $EDITOR "$f";;
+        *) xdg-open "$f" ;;
+    esac
+}}
+
+cmd edit-config ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+
+cmd mkdir ${{
+  printf "Directory Name: "
+  read ans
+  mkdir $ans
+}}
+
+cmd mkfile ${{
+  printf "File Name: "
+  read ans
+  $EDITOR $ans
+}}
+
+cmd chmod ${{
+  printf "Mode Bits: "
+  read ans
+
+  for file in "$fx"
+  do
+    chmod $ans $file
+  done
+
+  lf -remote 'send reload'
+}}
+
+cmd sudomkfile ${{
+  printf "File Name: "
+  read ans
+  sudo $EDITOR $ans
+}}
+
+# WALLPAPER
+cmd setwallpaper ${{
+    img_extensions=("jpg" "jpeg" "png" "gif")
+    extension="${f##*.}"
+    if [[ " ${img_extensions[@]} " == *" $extension "* ]]; then
+        if [ $DESKTOP_SESSION == gnome-xorg ];then
+            gsettings set org.gnome.desktop.background picture-uri "$f"
+        elif [ $DESKTOP_SESSION == hyprland ];then
+            echo "$f" >>  ~/.config/wall.txt && ~/.config/lf/scripts/set_wall.sh
+        else
+            cp "$f" ~/.config/ && feh --bg-fill ~/.config/wall.png
+        fi
+    else
+        echo "Selected file isn't a image file!"
+    fi
+
+}}
+
+# SET WALLPAPER ON GNOME DARK MODE
+cmd setwallpaper-dark ${{
+    if [ $DESKTOP_SESSION == gnome-xorg ];then 
+        gsettings set org.gnome.desktop.background picture-uri-dark "$f"
+    fi
+}}
+
+# FZF JUMP
+cmd fzf_jump ${{
+  res="$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')"
+  if [ -f "$res" ]; then
+    cmd="select"
+  elif [ -d "$res" ]; then
+    cmd="cd"
+  fi
+  lf -remote "send $id $cmd \"$res\""
+}}
+
+# DYNAMIC COLUMNS
+# ${{
+#    w=$(tput cols)
+#    if [ $w -le 80 ]; then
+#        lf -remote "send $id set ratios 1:2"
+#    elif [ $w -le 160 ]; then
+#        lf -remote "send $id set ratios 1:2:3"
+#    else
+#        lf -remote "send $id set ratios 1:2:3:5"
+#    fi
+# }}
+
+# ARCHIVE
+cmd unarchive ${{
+  case "$f" in
+      *.zip) 7z x "$f" ;;
+      *.tar.gz) tar -xzvf "$f" ;;
+      *.tar.bz2) tar -xjvf "$f" ;;
+      *.tar) tar -xvf "$f" ;;
+      *) echo "Unsupported format" ;;
+  esac
+}}
+
+cmd zip %zip -r "$f" "$f"
+cmd tar %tar cvf "$f.tar" "$f"
+cmd targz %tar cvzf "$f.tar.gz" "$f"
+cmd tarbz2 %tar cjvf "$f.tar.bz2" "$f"
+
+
+# TRASH CLI
+cmd trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    file=${files%%;*}
+    trash-put "$(basename "$file")"
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd clear_trash %trash-empty
+
+cmd restore_trash ${{
+  trash-restore
+}}
+
+cmd stripspace %stripspace "$f"
+
+cmd open-with-gui &$@ $fx ## opens with a gui application outside lf client
+cmd open-with-cli $$@ $fx ## opens with a cli application inside lf client
+
+# SELECT FILES & DIRS
+
+cmd select-files &{{
+    get_files() {
+        if [ "$lf_hidden" = 'false' ]; then
+            find "$PWD" -mindepth 1 -maxdepth 1 -type f -not -name '.*' -print0
+        else
+            find "$PWD" -mindepth 1 -maxdepth 1 -type f -print0
+        fi |
+        xargs -0 printf ' %q'
+    }
+
+    lf -remote "send $id :unselect; toggle $(get_files)"
+}}
+
+cmd select-dirs &{{
+    get_dirs() {
+        if [ "$lf_hidden" = 'false' ]; then
+            find "$PWD" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -print0
+        else
+            find "$PWD" -mindepth 1 -maxdepth 1 -type d -print0
+        fi |
+        xargs -0 printf ' %q'
+    }
+
+    lf -remote "send $id :unselect; toggle $(get_dirs)"
+}}
+
+cmd bookmark_jump ${{
+    res="$(cat $LF_BOOKMARK_PATH/$(ls $LF_BOOKMARK_PATH | fzf))"
+    lf -remote "send $id cd \"$res\""
+}}
+
+cmd bookmark_create ${{
+    read ans
+    echo $PWD > $LF_BOOKMARK_PATH/$ans
+}}
+
+# -------------
+# KEY BINDINGS
+# -------------
+
+map <esc> cmd-escape
+map e $$EDITOR $fx
+map D delete
+map <c-y> up
+map <c-e> down
+map <enter> open
+map gh cd ~
+map gr cd /
+map <m-up>    up
+map <m-down>  down
+map R bulk-rename
+map zp set preview!
+map t $tig -C $PWD
+map M push $mkdir<space>
+map m
+map n
+map "'"
+map '"'
+map d
+map c
+map e
+map f
+
+# BOOKMARK
+map bc bookmark_create
+map bj bookmark_jump
+
+# ARCHIVE MAPPING
+map az zip
+map at tar
+map ag targz
+map ab targz
+map au unarchive
+
+
+# TRASH MAPPINGS
+map dd trash
+map tc clear_trash
+map tr restore_trash
+
+# BASIC FUNCTIONS
+map . set hidden!
+map DD delete
+map p paste
+map x cut
+map y copy
+map <enter> open
+map mf mkfile
+map md mkdir
+map ch chmod
+map r rename
+map br $vimv $fx
+map R reload
+map C clear
+map U unselect
+map O push :open-with-gui<space> 
+map o push :open-with-cli<space> 
+
+# WALLPAPER
+map ; setwallpaper
+map w setwallpaper-dark
+
+# NAVIGATION
+map gd     cd ~/Documents
+map gc     cd ~/.config
+map git    cd ~/Downloads/GIT
+map gn     cd /media/Documents/Notes
+map gmd    cd /media/MEGAsync/Notes/Obsidian
+map gw     cd /media/Entertainment/Wallpapers
+map gs     cd ~/Pictures/Screenshots
+map gp     cd ~/Pictures
+map gmu    cd /media/MyWaifu/Music/
+map gmo    cd /media/MyWaifu/Movies/
+map gmw    cd /media/MyWaifu/
+map ga     cd /media/MyWaifu/anime

@@ -1,0 +1,24 @@
+@define-color cc-bg                             #011627;
+@define-color cc-fg                             #d6deeb;
+
+@define-color text-color                        #82aaff;
+@define-color text-color-disabled               #575656;
+
+@define-color bg-selected                       @text-color;
+
+@define-color floating-noti-bg                  #011627;
+@define-color floating-noti-border-color        @text-color;
+@define-color floating-noti-bg-darker           #0b2942;
+@define-color floating-noti-bg-hover            #1d3b53;
+@define-color floating-noti-close-bg            #1d3b53;
+@define-color floating-noti-close-bg-hover      #7fdbca;
+
+@define-color noti-bg                           @cc-bg;
+@define-color noti-border-color                 #1d3b53;
+@define-color noti-bg-darker                    #0b2942;
+@define-color noti-bg-hover                     #1d3b53;
+@define-color noti-close-bg                     @floating-noti-close-bg;
+@define-color noti-close-bg-hover               @floating-noti-close-bg-hover;
+
+@define-color dnd-slider-button                 @cc-fg;
+@define-color dnd-slider-button-checked         @cc-bg;

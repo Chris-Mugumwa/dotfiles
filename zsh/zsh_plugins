@@ -1,0 +1,30 @@
+#!/bin/bash
+
+plugins=(
+    zsh-users/zsh-syntax-highlighting
+    zsh-users/zsh-autosuggestions
+    zsh-users/zsh-history-substring-search
+    MichaelAquilina/zsh-you-should-use
+    Aloxaf/fzf-tab
+    jeffreytse/zsh-vi-mode
+    hlissner/zsh-autopair
+)
+
+single_file_plugins=(
+    catppuccin/zsh-syntax-highlighting/main/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
+    ohmyzsh/ohmyzsh/master/plugins/jsontools/jsontools.plugin.zsh
+)
+
+if ! command -v wget &>/dev/null || ! command -v git &>/dev/null; then
+    echo "Make sure wget & git properly installed"
+else
+    add_plugins "${plugins[@]}"
+    add_plugins --singlefile "${single_file_plugins[@]}"
+fi
+
+
+# Following function only specific to "hlissner/zsh-autopair"
+# https://github.com/jeffreytse/zsh-vi-mode#execute-extra-commands
+function zvm_after_init() {
+    bindkey "^[[A" fzf-history-widget
+}
