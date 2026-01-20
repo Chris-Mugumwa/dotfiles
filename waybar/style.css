@@ -30,23 +30,39 @@ tooltip {
 #memory,
 #network,
 #pulseaudio,
-#tray,
+#taskbar,
 #window,
 #mpris,
 #custom-privacy-dots,
 #workspaces {
   background: @crust;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid @crust;
   font-weight: 600;
   margin: 6px 0 6px 0;
   padding: 3.5px 16px;
 }
 
-#tray {
+#taskbar {
   margin-right: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-right: 3.5px;
+  padding-left: 3.5px;
+}
+
+#taskbar button {
+  border-radius: 6px;
+}
+
+#taskbar button:hover {
+  background: @color8;
+}
+
+#taskbar button:active {
+  background: @color2;
+}
+
+#taskbar button:focused {
+  background: @color8;
 }
 
 #workspaces {

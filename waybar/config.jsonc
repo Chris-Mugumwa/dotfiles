@@ -10,7 +10,7 @@
   "modules-center": [],
   "modules-right": [
     "custom/privacy-dots",
-    "tray",
+    "wlr/taskbar",
     "network",
     "clock",
     "custom/weather",
@@ -59,22 +59,12 @@
     "ignored-players": ["firefox", "chromium", "brave", "zen-browser"],
   },
 
-  "tray": {
+  "wlr/taskbar": {
     "icon-size": 16,
     "tooltip": false,
     "spacing": 10,
-    "show-passive-items": true,
-    "icons": {
-      "discord": "/opt/discord/discord.png",
-      "spotify": "/usr/share/applications/spotify-launcher.desktop",
-    },
-    "discord": {
-      "on-click": "exec discord",
-    },
-
-    "spotify": {
-      "on-click": "exec spotify-launcher",
-    },
+    "on-click": "activate",
+    "on-click-middle": "close",
   },
   "clock": {
     "format": "{:%H:%M %p - %d %B}",
