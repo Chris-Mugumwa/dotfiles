@@ -33,6 +33,7 @@ tooltip {
 #taskbar,
 #window,
 #mpris,
+#tray,
 #custom-privacy-dots,
 #workspaces {
   background: @crust;
@@ -63,6 +64,16 @@ tooltip {
 
 #taskbar button:focused {
   background: @color8;
+}
+
+#taskbar.empty {
+  all: unset;
+}
+
+#tray {
+  margin-right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #workspaces {

@@ -5,7 +5,7 @@ disabled = true
 
 [username]
 style_root = "red bold"
-format = "🦊 [$user](bold green) "
+format = "🌵 [$user](bold green) "
 disabled = false
 show_always = true
 
@@ -39,12 +39,13 @@ Documents = "󰈔 "
 Downloads = " "
 Music = "󰎈 "
 Pictures = "󰋩 "
-Videos = " "
+Videos = "  "
+"The Forge" = "󰅮 "
 
 #git
 [git_branch]
 format = " [$symbol$branch]($style) "
-symbol = "🍣 "
+symbol = "  "
 style = "bold green"
 always_show_remote = false
 only_attached = false
@@ -58,9 +59,7 @@ style = "bold yellow"
 [git_commit]
 commit_hash_length = 4
 style = "bold white"
-tag_symbol = " 🏷 "
-
-
+tag_symbol = "  "
 
 [git_metrics]
 added_style = "bold green"
@@ -70,7 +69,7 @@ format = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
 disabled = true
 
 [git_status]
-conflicted = "⚔️ "
+conflicted = "  "
 ahead = "⇡"
 behind = "[⇣${count}](bold dimmed blue)"
 diverged = "⇕${ahead_count}⇣${behind_count}"
@@ -114,12 +113,54 @@ detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts"]
 symbol ="  "
 style = "bold green"
 
+[golang]
+format = "[$symbol($version )]($style)"
+detect_extensions = ["go"]
+detect_files = ["go.mod", "go.sum"]
+symbol = "  "
+style = "bold cyan"
+
+[docker_context]
+format = "[$symbol$context]($style) "
+detect_extensions = []
+detect_files = ["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]
+symbol = "  "
+style = "bold blue"
+
 [rust]
 format = "[$symbol$version]($style) "
 style = "bold green"
+symbol= "  "
 
 #[time]
 #time_format = "%T"
 #format = "$time($style) "
 #style = "bright-white"
 #disabled = false
+
+[sudo]
+format = "[$symbol]($style)"
+symbol = " 󱕵 "
+disabled = false
+
+[jobs]
+symbol = " "
+threshold = 1
+
+[status]
+format = "[$status]($style) "
+disabled = false
+
+#[battery]
+#full_symbol = " "
+#charging_symbol = " "
+#discharging_symbol = " "
+
+# [[battery.display]]
+# threshold = 20
+# style = "bold red"
+
+[kubernetes]
+format = "[$symbol$context]($style) "
+symbol = "  "
+disabled = false

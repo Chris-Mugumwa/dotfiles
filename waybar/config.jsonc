@@ -6,7 +6,7 @@
   "passtrough": false,
   "gtk-layer-shell": true,
   "application": "user",
-  "modules-left": ["hyprland/workspaces", "cpu", "memory", "mpris"],
+  "modules-left": ["hyprland/workspaces", "tray", "cpu", "memory", "mpris"],
   "modules-center": [],
   "modules-right": [
     "custom/privacy-dots",
@@ -28,12 +28,30 @@
       "urgent": "󰊠",
     },
     "disable-scroll": false,
-    "all-outputs": true,
+    "all-outputs": false,
     "active-only": false,
     "on-scroll-up": "hyprctl dispatch workspace -1",
     "on-scroll-down": "hyprctl dispatch workspace +1",
     "persistent-workspaces": {
-      "*": 10,
+      "DP-1": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "HDMI-A-1": [11, 12, 13, 14, 15],
+    },
+  },
+  "tray": {
+    "icon-size": 16,
+    "tooltip": false,
+    "spacing": 10,
+    "show-passive-items": true,
+    "icons": {
+      "discord": "/opt/discord/discord.png",
+      "spotify": "/usr/share/applications/spotify-launcher.desktop",
+    },
+    "discord": {
+      "on-click": "exec discord",
+    },
+
+    "spotify": {
+      "on-click": "exec spotify-launcher",
     },
   },
   "cpu": {
