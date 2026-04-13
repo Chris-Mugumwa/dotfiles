@@ -118,3 +118,21 @@ obs-studio/logs/
 obs-studio/crashes/
 obs-studio/plugin_config/
 obs-studio/profiler_data/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ Zen Browser (Firefox fork) — profile is not rice, contains credentials      │
+# └──────────────────────────────────────────────────────────────────────────────┘
+zen/*
+!zen/jsrzrdtb.Default (release)/
+zen/jsrzrdtb.Default (release)/*
+!zen/jsrzrdtb.Default (release)/chrome/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ VS Code / Code-OSS — ignore app state, keep user rice                       │
+# └──────────────────────────────────────────────────────────────────────────────┘
+Code - OSS/*
+!Code - OSS/User/
+Code - OSS/User/*
+!Code - OSS/User/settings.json
+!Code - OSS/User/keybindings.json
+!Code - OSS/User/snippets/
