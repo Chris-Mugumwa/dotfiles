@@ -1,0 +1,16 @@
+session_name: dev
+start_directory: ~/code
+windows:
+  - window_name: main
+    layout: main-vertical
+    options:
+      main-pane-width: 60%
+    panes:
+      - shell_command:
+          - clear
+      - shell_command:
+          - echo "[server]  # bun dev / pnpm dev / go run . / docker compose up"
+      - shell_command:
+          - echo "[logs]    # tail -f / journalctl / docker logs -f"
+      - shell_command:
+          - echo "[scratch]"

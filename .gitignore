@@ -136,3 +136,8 @@ Code - OSS/User/*
 !Code - OSS/User/settings.json
 !Code - OSS/User/keybindings.json
 !Code - OSS/User/snippets/
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │ gh CLI — hosts.yml contains OAuth tokens                                    │
+# └──────────────────────────────────────────────────────────────────────────────┘
+gh/hosts.yml

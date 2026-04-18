@@ -129,49 +129,29 @@ fi
 pkill waybar
 waybar &
 
-# Update Hyprland border colors
+# Compositor border/focus-ring colors
 case $SELECTED_THEME in
-    "autumn")
-        hyprctl keyword general:col.active_border "rgb(d47766)"
-        hyprctl keyword general:col.inactive_border "rgb(1c1e26)"
-        ;;
-    "catppuccin-mocha")
-        hyprctl keyword general:col.active_border "rgb(b4befe)"
-        hyprctl keyword general:col.inactive_border "rgb(45475a)"
-        ;;
-    "crimson")
-        hyprctl keyword general:col.active_border "rgb(d74e61)"
-        hyprctl keyword general:col.inactive_border "rgb(16161c)"
-        ;;
-    "everforest")
-        hyprctl keyword general:col.active_border "rgb(a7c080)"
-        hyprctl keyword general:col.inactive_border "rgb(3d484d)"
-        ;;
-    "graphite")
-        hyprctl keyword general:col.active_border "rgb(888888)"
-        hyprctl keyword general:col.inactive_border "rgb(292929)"
-        ;;
-    "gruvbox")
-        hyprctl keyword general:col.active_border "rgb(b8bb26)"
-        hyprctl keyword general:col.inactive_border "rgb(3c3836)"
-        ;;
-    "kanagawa")
-        hyprctl keyword general:col.active_border "rgb(7e9cd8)"
-        hyprctl keyword general:col.inactive_border "rgb(223249)"
-        ;;
-    "nightowl")
-        hyprctl keyword general:col.active_border "rgb(82aaff)"
-        hyprctl keyword general:col.inactive_border "rgb(011627)"
-        ;;
-    "oxocarbon")
-        hyprctl keyword general:col.active_border "rgb(78a9ff)"
-        hyprctl keyword general:col.inactive_border "rgb(262626)"
-        ;;
-    "rosepine")
-        hyprctl keyword general:col.active_border "rgb(c4a7e7)"
-        hyprctl keyword general:col.inactive_border "rgb(191724)"
-        ;;
+    "autumn")           ACTIVE="d47766"; INACTIVE="1c1e26" ;;
+    "catppuccin-mocha") ACTIVE="b4befe"; INACTIVE="45475a" ;;
+    "crimson")          ACTIVE="d74e61"; INACTIVE="16161c" ;;
+    "everforest")       ACTIVE="a7c080"; INACTIVE="3d484d" ;;
+    "graphite")         ACTIVE="888888"; INACTIVE="292929" ;;
+    "gruvbox")          ACTIVE="b8bb26"; INACTIVE="3c3836" ;;
+    "kanagawa")         ACTIVE="7e9cd8"; INACTIVE="223249" ;;
+    "nightowl")         ACTIVE="82aaff"; INACTIVE="011627" ;;
+    "oxocarbon")        ACTIVE="78a9ff"; INACTIVE="262626" ;;
+    "rosepine")         ACTIVE="c4a7e7"; INACTIVE="191724" ;;
 esac
+
+# Apply to whichever compositor is running (Niri auto-reloads config.kdl on save)
+if pgrep -x niri >/dev/null 2>&1; then
+    NIRI_CONF="$HOME/.config/niri/config.kdl"
+    sed -i -E "s|active-color \"#[a-fA-F0-9]{6,8}\"|active-color \"#${ACTIVE}\"|" "$NIRI_CONF"
+    sed -i -E "s|inactive-color \"#[a-fA-F0-9]{6,8}\"|inactive-color \"#${INACTIVE}\"|" "$NIRI_CONF"
+elif pgrep -x Hyprland >/dev/null 2>&1; then
+    hyprctl keyword general:col.active_border "rgb(${ACTIVE})"
+    hyprctl keyword general:col.inactive_border "rgb(${INACTIVE})"
+fi
 
 # Update Papirus folder colors
 if command -v papirus-folders &> /dev/null; then

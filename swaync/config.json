@@ -118,8 +118,8 @@
       {
         "label": "",
         "type": "toggle",
-        "command": "if [ \"$SWAYNC_TOGGLE_STATE\" = \"true\" ]; then hyprctl dispatch exec hypridle; else pkill -TERM hypridle; fi",
-        "update-command": "pgrep -x hypridle >/dev/null && echo true || echo false"
+        "command": "sh -c 'case $DESKTOP_SESSION in niri) if [ \"$SWAYNC_TOGGLE_STATE\" = \"true\" ]; then ~/.config/swayidle/start.sh; else pkill -TERM swayidle; fi ;; *) if [ \"$SWAYNC_TOGGLE_STATE\" = \"true\" ]; then hyprctl dispatch exec hypridle; else pkill -TERM hypridle; fi ;; esac'",
+        "update-command": "{ pgrep -x swayidle || pgrep -x hypridle; } >/dev/null && echo true || echo false"
       }
     ]
    }

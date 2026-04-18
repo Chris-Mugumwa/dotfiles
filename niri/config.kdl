@@ -1,0 +1,378 @@
+// Niri config — Phase 2 daily-driver
+// Ported from ~/.config/hypr/ (hyprland.conf + keybindings.conf + windowrules.conf)
+// Niri auto-reloads this file on save — no reload command needed.
+
+prefer-no-csd
+
+environment {
+    GBM_BACKEND "nvidia-drm"
+    __GLX_VENDOR_LIBRARY_NAME "nvidia"
+    LIBVA_DRIVER_NAME "nvidia"
+    MOZ_DISABLE_RDD_SANDBOX "1"
+    MOZ_ENABLE_WAYLAND "1"
+    OZONE_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    SDL_VIDEO_FULLSCREEN_HEAD "1"
+    XCURSOR_SIZE "24"
+    XCURSOR_THEME "Bibata-Modern-Ice"
+    WLR_OUTPUT_PRIMARY "DP-1"
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Ice"
+    xcursor-size 24
+}
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+    }
+    touchpad {}
+    mouse {}
+    tablet {}
+    focus-follows-mouse
+}
+
+// ════════════════════════════════════════
+//  Outputs
+// ════════════════════════════════════════
+
+output "DP-1" {
+    position x=0 y=0
+    scale 1.0
+}
+
+// HDMI-A-2 = Dell 27" rotated. Hyprland transform,3 = 270°.
+// If orientation looks wrong, try "90" / "180" / "normal".
+output "HDMI-A-2" {
+    transform "270"
+    position x=3440 y=-560
+    scale 1.0
+}
+
+// HDMI-A-1 = Arzopa 16" portable, centered below DP-1.
+output "HDMI-A-1" {
+    position x=760 y=1440
+    scale 1.0
+}
+
+// ════════════════════════════════════════
+//  Layout — Everforest colors, scroller-like presets
+// ════════════════════════════════════════
+
+layout {
+    gaps 6
+    center-focused-column "on-overflow"
+
+    focus-ring {
+        width 2
+        active-color "#a7c080"
+        inactive-color "#3d484d"
+    }
+
+    border {
+        off
+    }
+
+    preset-column-widths {
+        proportion 0.333
+        proportion 0.5
+        proportion 0.667
+        proportion 1.0
+    }
+
+    default-column-width {
+        proportion 0.5
+    }
+
+    insert-hint {
+        color "#a7c080aa"
+    }
+}
+
+// ════════════════════════════════════════
+//  Animations — Niri defaults for now, tune later
+// ════════════════════════════════════════
+
+animations {
+    slowdown 1.0
+}
+
+// ════════════════════════════════════════
+//  Pre-declared named workspaces
+// ════════════════════════════════════════
+
+// DP-1 (34" ultrawide) — 9 persistent workspaces
+workspace "main-1" { open-on-output "DP-1"; }
+workspace "main-2" { open-on-output "DP-1"; }
+workspace "main-3" { open-on-output "DP-1"; }
+workspace "main-4" { open-on-output "DP-1"; }
+workspace "main-5" { open-on-output "DP-1"; }
+workspace "main-6" { open-on-output "DP-1"; }
+workspace "main-7" { open-on-output "DP-1"; }
+workspace "main-8" { open-on-output "DP-1"; }
+workspace "main-9" { open-on-output "DP-1"; }
+
+// HDMI-A-2 (27" Dell rotated) — 5 persistent
+workspace "dell-1" { open-on-output "HDMI-A-2"; }
+workspace "dell-2" { open-on-output "HDMI-A-2"; }
+workspace "dell-3" { open-on-output "HDMI-A-2"; }
+workspace "dell-4" { open-on-output "HDMI-A-2"; }
+workspace "dell-5" { open-on-output "HDMI-A-2"; }
+
+// HDMI-A-1 (Arzopa 16" portable) — 5 persistent
+workspace "arz-1" { open-on-output "HDMI-A-1"; }
+workspace "arz-2" { open-on-output "HDMI-A-1"; }
+workspace "arz-3" { open-on-output "HDMI-A-1"; }
+workspace "arz-4" { open-on-output "HDMI-A-1"; }
+workspace "arz-5" { open-on-output "HDMI-A-1"; }
+
+// ════════════════════════════════════════
+//  Startup (mirrors ~/.config/hypr/startup.conf, minus hyprpm/hyprctl)
+// ════════════════════════════════════════
+
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "waybar"
+spawn-at-startup "swaync"
+spawn-at-startup "swayosd-server"
+spawn-at-startup "sh" "-c" "wl-paste --type text --watch cliphist store"
+spawn-at-startup "sh" "-c" "wl-paste --type image --watch cliphist store"
+spawn-at-startup "nm-applet" "--no-indicator"
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "playerctld"
+spawn-at-startup "sh" "-c" "awww-daemon && sleep 0.5 && awww img $(readlink -f ~/.cache/wall-cache/current_wallpaper 2>/dev/null) --transition-type any --transition-duration 1 2>/dev/null || true"
+spawn-at-startup "sh" "-c" "~/.config/swayidle/start.sh"
+
+// ── Dev apps startup (staggered so window rules bind cleanly) ──
+spawn-at-startup "sh" "-c" "sleep 1 && kitty"
+spawn-at-startup "sh" "-c" "sleep 2 && kitty --class kitty-dev --title 'dev' -e tmuxp load -y dev"
+spawn-at-startup "sh" "-c" "sleep 3 && kitty --class kitty-sysdash --title 'sysdash' -e lazydocker"
+spawn-at-startup "sh" "-c" "sleep 4 && spotify-launcher"
+spawn-at-startup "sh" "-c" "sleep 5 && discord"
+spawn-at-startup "sh" "-c" "sleep 6 && obsidian"
+spawn-at-startup "sh" "-c" "sleep 7 && zen-browser"
+
+// ════════════════════════════════════════
+//  Window rules (ported from windowrules.conf)
+// ════════════════════════════════════════
+
+// Rounded corners on every window (Niri's analog to Hyprland's rounding=5)
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+// Float + size keepassxc
+window-rule {
+    match app-id="^org\\.keepassxc\\.KeePassXC$"
+    open-floating true
+    default-column-width { fixed 800; }
+    default-window-height { fixed 600; }
+}
+
+// Float copyq
+window-rule {
+    match app-id="^com\\.github\\.hluk\\.copyq$"
+    open-floating true
+}
+
+// Float wezterm
+window-rule {
+    match app-id="^org\\.wezfurlong\\.wezterm$"
+    open-floating true
+}
+
+// Obsidian semi-transparent
+window-rule {
+    match app-id="^obsidian$"
+    opacity 0.9
+}
+
+// Spotify → Arzopa arz-2
+window-rule {
+    match app-id="^spotify$"
+    open-on-workspace "arz-2"
+}
+
+// Discord → Dell vertical dell-1
+window-rule {
+    match app-id="^discord$"
+    open-on-workspace "dell-1"
+}
+
+// Obsidian → dell-3 (separate rule from the opacity one above)
+window-rule {
+    match app-id="^obsidian$"
+    open-on-workspace "dell-3"
+}
+
+// Zen browser → dell-2 (reading / docs)
+window-rule {
+    match app-id="^zen-browser$"
+    open-on-workspace "dell-2"
+}
+
+// Chromium → main-3 (webdev target / playwright parity)
+window-rule {
+    match app-id="^(chromium|Chromium)$"
+    open-on-workspace "main-3"
+}
+
+// Tagged kitty instances — dev session and system dashboard
+window-rule {
+    match app-id="^kitty-dev$"
+    open-on-workspace "arz-1"
+}
+window-rule {
+    match app-id="^kitty-sysdash$"
+    open-on-workspace "arz-3"
+}
+
+// Quake-style kitty dropdown (Mod+Shift+Return spawns with --class kitty-dropdown)
+window-rule {
+    match app-id="^kitty-dropdown$"
+    open-floating true
+    default-column-width { fixed 2000; }
+    default-window-height { fixed 500; }
+}
+
+// Android Emulator
+window-rule {
+    match app-id="^Emulator$"
+    open-floating true
+}
+window-rule {
+    match title="^(Emulator|Android Emulator).*$"
+    open-floating true
+}
+
+// qs-master popup (lost the pin behavior — Niri has no sticky)
+window-rule {
+    match title="^qs-master$"
+    open-floating true
+}
+
+// Games go to the ultrawide, fullscreen
+window-rule {
+    match app-id="^(steam_app_.*|gamescope|lutris|heroic)$"
+    open-on-output "DP-1"
+    open-fullscreen true
+}
+
+// ════════════════════════════════════════
+//  Keybinds
+// ════════════════════════════════════════
+
+binds {
+    // ── Apps & launchers ──
+    Mod+Return           { spawn "kitty"; }
+    Mod+Shift+Return     { spawn "kitty" "--class" "kitty-dropdown"; }
+    Mod+A                { spawn "rofi" "-show" "drun" "-show-icons"; }
+    Mod+D                { spawn "sh" "-c" "~/.config/hypr/dmenu.sh"; }
+    Mod+V                { spawn "sh" "-c" "cliphist list | rofi -dmenu -theme-str 'configuration{dmenu{display-name:\"\\uF114C \";}} listview{scrollbar:true;}' | cliphist decode | wl-copy"; }
+    Mod+E                { spawn "nemo"; }
+    Mod+Shift+E          { spawn "rofi" "-modi" "emoji" "-show" "emoji" "-config" "/home/chris/.config/rofi/launchers/type-1/style-6.rasi"; }
+    Mod+N                { spawn "swaync-client" "-t" "-sw"; }
+    Mod+Shift+T          { spawn "sh" "-c" "~/.config/hypr/scripts/theme-switcher.sh"; }
+    Mod+Shift+W          { spawn "sh" "-c" "~/.config/hypr/scripts/wallpaper-switcher.sh"; }
+    Mod+X                { spawn "sh" "-c" "~/.config/rofi/powermenu/launch.sh"; }
+    Mod+B                { spawn "zen-browser"; }
+    Mod+G                { spawn "sh" "-c" "~/.config/rofi/gamelauncher/launch.sh"; }
+    Mod+Shift+G          { spawn "sh" "-c" "~/.local/bin/game-mode toggle"; }
+    Mod+Shift+N          { spawn "obsidian"; }
+    Mod+W                { spawn "sh" "-c" "killall waybar; waybar &"; }
+    Mod+Alt+L            { spawn "swaylock"; }
+
+    // ── Window operations ──
+    Mod+Q                { close-window; }
+    Mod+Shift+Q          { quit skip-confirmation=true; }
+    Mod+F                { fullscreen-window; }
+    Mod+Space            { toggle-window-floating; }
+
+    // ── Focus (HJKL + arrows) ──
+    Mod+H                { focus-column-left; }
+    Mod+L                { focus-column-right; }
+    Mod+J                { focus-window-down; }
+    Mod+K                { focus-window-up; }
+    Mod+Left             { focus-column-left; }
+    Mod+Right            { focus-column-right; }
+    Mod+Down             { focus-window-down; }
+    Mod+Up               { focus-window-up; }
+    Mod+Tab              { focus-monitor-next; }
+
+    // ── Window movement ──
+    Mod+Shift+H          { move-column-left; }
+    Mod+Shift+L          { move-column-right; }
+    Mod+Shift+J          { move-window-down; }
+    Mod+Shift+K          { move-window-up; }
+    Mod+Shift+Left       { move-column-left; }
+    Mod+Shift+Right      { move-column-right; }
+    Mod+Shift+Down       { move-window-down; }
+    Mod+Shift+Up         { move-window-up; }
+
+    // ── Move column to another monitor ──
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+
+    // ── Scroller column ops (cpiber/hyprscroller parity) ──
+    Mod+C                { center-column; }
+    Mod+Shift+C          { maximize-column; }
+    Mod+Equal            { set-column-width "+10%"; }
+    Mod+Minus            { set-column-width "-10%"; }
+    Mod+R                { switch-preset-column-width; }
+    Mod+I                { consume-or-expel-window-left; }
+    Mod+Shift+I          { consume-or-expel-window-right; }
+
+    // ── Overview (THE feature) ──
+    Mod+O                { toggle-overview; }
+    Mod+Shift+Tab        { toggle-overview; }
+
+    // ── Workspaces (per-monitor, Niri-native relative) ──
+    Mod+1                { focus-workspace 1; }
+    Mod+2                { focus-workspace 2; }
+    Mod+3                { focus-workspace 3; }
+    Mod+4                { focus-workspace 4; }
+    Mod+5                { focus-workspace 5; }
+    Mod+6                { focus-workspace 6; }
+    Mod+7                { focus-workspace 7; }
+    Mod+8                { focus-workspace 8; }
+    Mod+9                { focus-workspace 9; }
+
+    Mod+Ctrl+1           { move-column-to-workspace 1; }
+    Mod+Ctrl+2           { move-column-to-workspace 2; }
+    Mod+Ctrl+3           { move-column-to-workspace 3; }
+    Mod+Ctrl+4           { move-column-to-workspace 4; }
+    Mod+Ctrl+5           { move-column-to-workspace 5; }
+    Mod+Ctrl+6           { move-column-to-workspace 6; }
+    Mod+Ctrl+7           { move-column-to-workspace 7; }
+    Mod+Ctrl+8           { move-column-to-workspace 8; }
+    Mod+Ctrl+9           { move-column-to-workspace 9; }
+
+    Mod+Comma            { focus-workspace-up; }
+    Mod+Period           { focus-workspace-down; }
+
+    Mod+WheelScrollDown  { focus-workspace-down; }
+    Mod+WheelScrollUp    { focus-workspace-up; }
+
+    // ── Audio / media ──
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "-l" "1.4" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "-l" "1.4" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioPlay        allow-when-locked=true { spawn "playerctl" "play-pause"; }
+    XF86AudioPause       allow-when-locked=true { spawn "playerctl" "play-pause"; }
+    XF86AudioNext        allow-when-locked=true { spawn "playerctl" "next"; }
+    XF86AudioPrev        allow-when-locked=true { spawn "playerctl" "previous"; }
+
+    // ── Screenshot / record ──
+    Alt+S                { spawn "sh" "-c" "~/.config/hypr/scripts/screenshot.sh"; }
+    Alt+R                { spawn "sh" "-c" "wf-recorder -f $(xdg-user-dir VIDEOS)/$(date +%H:%M:%S_%d-%m-%Y.mp4) | notify-send 'Recording Started'"; }
+    Alt+Shift+R          { spawn "sh" "-c" "killall -s SIGINT wf-recorder && notify-send 'Recording Saved'"; }
+}

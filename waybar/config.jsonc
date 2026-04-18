@@ -1,4 +1,6 @@
-{
+[{
+  "name": "main",
+  "output": "DP-1",
   "layer": "top",
   "position": "top",
   "mod": "dock",
@@ -6,7 +8,7 @@
   "passtrough": false,
   "gtk-layer-shell": true,
   "application": "user",
-  "modules-left": ["hyprland/workspaces", "tray", "cpu", "memory", "mpris"],
+  "modules-left": ["niri/workspaces", "tray", "cpu", "memory", "mpris"],
   "modules-center": [],
   "modules-right": [
     "custom/privacy-dots",
@@ -19,23 +21,16 @@
     "custom/swaync",
     "custom/power",
   ],
-  "hyprland/workspaces": {
-    "on-click": "activate",
+  "niri/workspaces": {
     "format": "<span font='9' rise='-2500'>{icon}</span>",
     "format-icons": {
       "default": "",
       "active": "󰮯",
       "urgent": "󰊠",
     },
-    "disable-scroll": false,
     "all-outputs": false,
-    "active-only": false,
-    "on-scroll-up": "hyprctl dispatch workspace -1",
-    "on-scroll-down": "hyprctl dispatch workspace +1",
-    "persistent-workspaces": {
-      "DP-1": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      "HDMI-A-1": [11, 12, 13, 14, 15],
-    },
+    "on-scroll-up": "niri msg action focus-workspace-up",
+    "on-scroll-down": "niri msg action focus-workspace-down",
   },
   "tray": {
     "icon-size": 16,
@@ -91,7 +86,7 @@
     "on-click": "env EVERCAL_TITLEBAR=0 /opt/EverCal/ever_cal",
   },
   "custom/power": {
-    "format": "<span font='14' rise='-500'>⏻</span>",
+    "format": "<span font='9' rise='-500'>⏻</span>",
     "on-click": "wlogout",
     "tooltip": false,
   },
@@ -147,10 +142,10 @@
     "scroll-step": 5,
     "format-icons": {
       "default": [
-        "<span font='9'></span> ",
-        "<span font='9'></span> ",
-        "<span font='9'></span> ",
-        "<span font='9'></span> ",
+        "<span font='9'> </span> ",
+        "<span font='9'> </span> ",
+        "<span font='9'> </span> ",
+        "<span font='9'> </span> ",
       ],
     },
   },
@@ -173,4 +168,33 @@
     "tooltip-format-enumerate-connected": "{device_alias}",
     "on-click": "blueman-manager",
   },
-}
+}, {
+  "name": "minimal",
+  "output": ["HDMI-A-1", "HDMI-A-2"],
+  "layer": "top",
+  "position": "top",
+  "mod": "dock",
+  "exclusive": true,
+  "passtrough": false,
+  "gtk-layer-shell": true,
+  "modules-left": ["niri/workspaces"],
+  "modules-right": ["wlr/taskbar"],
+  "niri/workspaces": {
+    "format": "<span font='9' rise='-2500'>{icon}</span>",
+    "format-icons": {
+      "default": "",
+      "active": "󰮯",
+      "urgent": "󰊠",
+    },
+    "all-outputs": false,
+    "on-scroll-up": "niri msg action focus-workspace-up",
+    "on-scroll-down": "niri msg action focus-workspace-down",
+  },
+  "wlr/taskbar": {
+    "icon-size": 16,
+    "tooltip": false,
+    "spacing": 10,
+    "on-click": "activate",
+    "on-click-middle": "close",
+  },
+}]

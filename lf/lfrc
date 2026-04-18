@@ -79,7 +79,7 @@ cmd setwallpaper ${{
     if [[ " ${img_extensions[@]} " == *" $extension "* ]]; then
         if [ $DESKTOP_SESSION == gnome-xorg ];then
             gsettings set org.gnome.desktop.background picture-uri "$f"
-        elif [ $DESKTOP_SESSION == hyprland ];then
+        elif [ $DESKTOP_SESSION == hyprland ] || [ $DESKTOP_SESSION == niri ];then
             echo "$f" >>  ~/.config/wall.txt && ~/.config/lf/scripts/set_wall.sh
         else
             cp "$f" ~/.config/ && feh --bg-fill ~/.config/wall.png

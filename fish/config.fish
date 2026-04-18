@@ -120,7 +120,6 @@ if test -f ~/.secret.fish
     source ~/.secret.fish
 end
 
-source ~/.config/fish/completions/aliases.fish
 source ~/.config/lf/icons/icons
 
 fish_add_path /home/chris/.spicetify
@@ -135,3 +134,9 @@ end
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+# mise — unified version manager (Node / Bun / pnpm / Go / Python / Rust).
+# Installed via `curl https://mise.run | sh`. Activation is a no-op if mise is absent.
+if test -x ~/.local/bin/mise
+    ~/.local/bin/mise activate fish | source
+end

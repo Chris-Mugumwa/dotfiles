@@ -7,18 +7,18 @@ return {
 		local file_extension = h.name:match("([^.]+)$")
 		local done = false
 
-		local function swww_cmd(img_path)
+		local function awww_cmd(img_path)
 			os.execute(
 				string.format(
-					"swww img %s --transition-fps 60 --transition-duration 2 --transition-type left --transition-bezier 0.25,1,0.5,1",
+					"awww img %s --transition-fps 60 --transition-duration 2 --transition-type left --transition-bezier 0.25,1,0.5,1",
 					img_path
 				)
 			)
 		end
 
-		-- Cheks whether swww-daemon is running, if not starts
+		-- Cheks whether awww-daemon is running, if not starts
 		local function sww_daemon_handler()
-			local handle = io.popen("pgrep -x swww-daemon")
+			local handle = io.popen("pgrep -x awww-daemon")
 
 			if not handle then
 				error("Error checking running process")
@@ -31,17 +31,17 @@ return {
 				return
 			end
 
-			os.execute("notify-send 'swww-daemon not running, starting swww daemon'")
-			os.execute("nohup swww-daemon > /dev/null 2>&1 & disown %1")
+			os.execute("notify-send 'awww-daemon not running, starting awww daemon'")
+			os.execute("nohup awww-daemon > /dev/null 2>&1 & disown %1")
 			os.execute("sleep 1")
-			os.execute("notify-send 'swww-daemon started'")
+			os.execute("notify-send 'awww-daemon started'")
 		end
 
 		-- Checks whether the given file's extension matches the img_extensions list
 		for _, v in ipairs(img_extensions) do
 			if v == file_extension then
 				sww_daemon_handler()
-				swww_cmd(h.url)
+				awww_cmd(h.url)
 				done = true
 				break
 			end

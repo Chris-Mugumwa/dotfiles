@@ -1,5 +1,5 @@
 #!/bin/bash
-# Toggle between hyprscroller and dwindle layouts
+# Toggle between scroller and dwindle layouts
 
 current=$(hyprctl getoption general:layout -j | jq -r '.str')
 

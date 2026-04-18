@@ -59,7 +59,9 @@ run_cmd() {
 			amixer set Master mute
 			systemctl suspend
 		elif [[ $1 == '--logout' ]]; then
-			if [[ "$DESKTOP_SESSION" == 'hyprland' ]]; then
+			if [[ "$DESKTOP_SESSION" == 'niri' ]]; then
+				niri msg action quit --skip-confirmation
+			elif [[ "$DESKTOP_SESSION" == 'hyprland' ]]; then
 				# why pkill? killall Hyprland dosen't work on nixos.
 				# why killall or pkill? cause 'hyprctl disatch exit 0'
 				# causes system shutdown for some reason.
