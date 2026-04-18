@@ -140,3 +140,8 @@ set --export PATH $BUN_INSTALL/bin $PATH
 if test -x ~/.local/bin/mise
     ~/.local/bin/mise activate fish | source
 end
+
+# ssh-agent (systemd user unit) — socket lives in $XDG_RUNTIME_DIR
+if test -n "$XDG_RUNTIME_DIR"
+    set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
+end
