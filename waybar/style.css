@@ -26,6 +26,8 @@ tooltip {
 #custom-power,
 #custom-swaync,
 #custom-weather,
+#custom-docker,
+#custom-share,
 #clock,
 #memory,
 #network,
@@ -174,5 +176,24 @@ tooltip {
 
 #bluetooth {
   color: @color0;
+  margin-right: 10px;
+}
+
+#custom-docker {
+  color: @color5;
+  margin-left: 10px;
+}
+
+#custom-docker.idle {
+  color: @color9;
+}
+
+#custom-docker.off,
+#custom-docker.absent {
+  color: @color9;
+}
+
+#custom-share {
+  color: @color7;
   margin-right: 10px;
 }

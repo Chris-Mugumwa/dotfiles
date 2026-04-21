@@ -1,0 +1,20 @@
+session_name: dell
+start_directory: ~/code
+windows:
+  - window_name: term
+    shell_command:
+      - clear
+  - window_name: logs
+    shell_command:
+      - echo "[logs]    # tail -f / journalctl -f / docker compose logs -f"
+  - window_name: watch
+    shell_command:
+      - echo "[watch]   # tests / build watchers"
+  - window_name: scratch
+    shell_command:
+      - clear
+options:
+  base-index: 1
+  pane-base-index: 1
+  mouse: "on"
+  status-position: "top"

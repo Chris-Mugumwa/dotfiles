@@ -1,5 +1,5 @@
-// Niri config — Phase 3 (3-monitor workstation)
-// Huawei ultrawide (DP-1) · Arzopa 16" portable (HDMI-A-1) · Dell 27" rotated (HDMI-A-2)
+// Niri config — Phase 2 daily-driver
+// Ported from ~/.config/hypr/ (hyprland.conf + keybindings.conf + windowrules.conf)
 // Niri auto-reloads this file on save — no reload command needed.
 
 prefer-no-csd
@@ -40,15 +40,19 @@ input {
 }
 
 // ════════════════════════════════════════
+//  Outputs
+// ════════════════════════════════════════
+
+// HDMI-A-2 = Dell 27" rotated. Hyprland transform,3 = 270°.
+// If orientation looks wrong, try "90" / "180" / "normal".
+// HDMI-A-1 = Arzopa 16" portable, centered below DP-1.
+// ════════════════════════════════════════
 //  Layout — Everforest colors, scroller-like presets
-//  Per-output default widths are set in monitors.kdl (Niri 25.11+)
 // ════════════════════════════════════════
 
 layout {
     gaps 6
     center-focused-column "on-overflow"
-    always-center-single-column
-    default-column-display "tabbed"
 
     focus-ring {
         width 2
@@ -63,13 +67,6 @@ layout {
     preset-column-widths {
         proportion 0.333
         proportion 0.5
-        proportion 0.75
-        proportion 1.0
-    }
-
-    preset-window-heights {
-        proportion 0.333
-        proportion 0.5
         proportion 0.667
         proportion 1.0
     }
@@ -81,14 +78,10 @@ layout {
     insert-hint {
         color "#a7c080aa"
     }
-
-    tab-indicator {
-        place-within-column true
-    }
 }
 
 // ════════════════════════════════════════
-//  Animations — Niri defaults
+//  Animations — Niri defaults for now, tune later
 // ════════════════════════════════════════
 
 animations {
@@ -99,7 +92,7 @@ animations {
 //  Pre-declared named workspaces
 // ════════════════════════════════════════
 
-// DP-1 (Huawei ultrawide) — 9 persistent
+// DP-1 (34" ultrawide) — 9 persistent workspaces
 workspace "main-1" { open-on-output "DP-1"; }
 workspace "main-2" { open-on-output "DP-1"; }
 workspace "main-3" { open-on-output "DP-1"; }
@@ -110,7 +103,7 @@ workspace "main-7" { open-on-output "DP-1"; }
 workspace "main-8" { open-on-output "DP-1"; }
 workspace "main-9" { open-on-output "DP-1"; }
 
-// HDMI-A-2 (Dell 27" rotated) — 5 persistent
+// HDMI-A-2 (27" Dell rotated) — 5 persistent
 workspace "dell-1" { open-on-output "HDMI-A-2"; }
 workspace "dell-2" { open-on-output "HDMI-A-2"; }
 workspace "dell-3" { open-on-output "HDMI-A-2"; }
@@ -125,10 +118,9 @@ workspace "arz-4" { open-on-output "HDMI-A-1"; }
 workspace "arz-5" { open-on-output "HDMI-A-1"; }
 
 // ════════════════════════════════════════
-//  Startup
+//  Startup (mirrors ~/.config/hypr/startup.conf, minus hyprpm/hyprctl)
 // ════════════════════════════════════════
 
-// ── System services ──
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "waybar"
 spawn-at-startup "swaync"
@@ -141,164 +133,92 @@ spawn-at-startup "playerctld"
 spawn-at-startup "sh" "-c" "awww-daemon && sleep 0.5 && awww img $(readlink -f ~/.cache/wall-cache/current_wallpaper 2>/dev/null) --transition-type any --transition-duration 1 2>/dev/null || true"
 spawn-at-startup "sh" "-c" "~/.config/swayidle/start.sh"
 
-// ── Arzopa ──
-// arz-1 kitty + tmuxp dev (4-pane)
-spawn-at-startup "sh" "-c" "sleep 1 && kitty --class kitty-arz1 --title 'arz1:tmux' -e tmuxp load -y dev"
-// arz-2 two fish instances — claude --continue + fresh claude
-spawn-at-startup "sh" "-c" "sleep 2 && kitty --class kitty-arz2a --title 'arz2a:claude --continue' -e fish -C 'claude --continue'"
-spawn-at-startup "sh" "-c" "sleep 2 && kitty --class kitty-arz2b --title 'arz2b:claude' -e fish -C 'claude'"
-// arz-3 zen browser (dedicated instance)
-spawn-at-startup "sh" "-c" "sleep 3 && zen-browser --new-instance --class zen-arz3"
-// arz-4 lazydocker + lazygit
-spawn-at-startup "sh" "-c" "sleep 4 && kitty --class kitty-arz4a --title 'arz4a:lazydocker' -e lazydocker"
-spawn-at-startup "sh" "-c" "sleep 4 && kitty --class kitty-arz4b --title 'arz4b:lazygit' -e lazygit"
-// arz-5 spotify
-spawn-at-startup "sh" "-c" "sleep 5 && spotify-launcher"
-
-// ── Dell ──
-// dell-1 kitty + tmuxp dell (tabbed windows, full height)
-spawn-at-startup "sh" "-c" "sleep 2 && kitty --class kitty-dell1 --title 'dell1:tmux' -e tmuxp load -y dell"
-// dell-2 nemo + fish/yazi
-spawn-at-startup "sh" "-c" "sleep 3 && nemo"
-spawn-at-startup "sh" "-c" "sleep 3 && kitty --class kitty-dell2-yazi --title 'dell2:yazi' -e yazi"
-// dell-3 zen browser
-spawn-at-startup "sh" "-c" "sleep 4 && zen-browser --new-instance --class zen-dell3"
-// dell-4 dbeaver + yaak
-spawn-at-startup "sh" "-c" "sleep 5 && dbeaver"
-spawn-at-startup "sh" "-c" "sleep 5 && sh -c 'command -v yaak >/dev/null && yaak'"
-// dell-5 discord (steam is manual launch)
-spawn-at-startup "sh" "-c" "sleep 6 && discord"
-
-// ── Huawei (main) ──
-// main-1 nvim + zen
-spawn-at-startup "sh" "-c" "sleep 2 && kitty --class kitty-main1-nvim --title 'main1:nvim' -e nvim"
-spawn-at-startup "sh" "-c" "sleep 3 && zen-browser --new-instance --class zen-main1"
-// main-2 obsidian + excalidraw (self-hosted at localhost:5000, runs as Chromium PWA)
-spawn-at-startup "sh" "-c" "sleep 4 && obsidian"
-spawn-at-startup "sh" "-c" "sleep 4 && chromium --app=http://localhost:5000 --class=excalidraw"
-// main-3 two naked fish instances
-spawn-at-startup "sh" "-c" "sleep 5 && kitty --class kitty-main3a --title 'main3a:fish'"
-spawn-at-startup "sh" "-c" "sleep 5 && kitty --class kitty-main3b --title 'main3b:fish'"
+// ── Dev apps startup (staggered so window rules bind cleanly) ──
+spawn-at-startup "sh" "-c" "sleep 1 && kitty"
+spawn-at-startup "sh" "-c" "sleep 2 && kitty --class kitty-dev --title 'dev' -e tmuxp load -y dev"
+spawn-at-startup "sh" "-c" "sleep 3 && kitty --class kitty-sysdash --title 'sysdash' -e lazydocker"
+spawn-at-startup "sh" "-c" "sleep 4 && spotify-launcher"
+spawn-at-startup "sh" "-c" "sleep 5 && discord"
+spawn-at-startup "sh" "-c" "sleep 6 && obsidian"
+spawn-at-startup "sh" "-c" "sleep 7 && zen-browser"
 
 // ════════════════════════════════════════
-//  Window rules
+//  Window rules (ported from windowrules.conf)
 // ════════════════════════════════════════
 
-// Rounded corners on every window
+// Rounded corners on every window (Niri's analog to Hyprland's rounding=5)
 window-rule {
     geometry-corner-radius 8
     clip-to-geometry true
 }
 
-// ── Floating helpers ──
+// Float + size keepassxc
 window-rule {
     match app-id="^org\\.keepassxc\\.KeePassXC$"
     open-floating true
     default-column-width { fixed 800; }
     default-window-height { fixed 600; }
 }
+
+// Float copyq
 window-rule {
     match app-id="^com\\.github\\.hluk\\.copyq$"
     open-floating true
 }
+
+// Float wezterm
 window-rule {
     match app-id="^org\\.wezfurlong\\.wezterm$"
     open-floating true
 }
 
-// ── Arzopa pins ──
-window-rule {
-    match app-id="^kitty-arz1$"
-    open-on-workspace "arz-1"
-}
-window-rule {
-    match app-id="^kitty-arz2[ab]$"
-    open-on-workspace "arz-2"
-}
-window-rule {
-    match app-id="^zen-arz3$"
-    open-on-workspace "arz-3"
-}
-window-rule {
-    match app-id="^kitty-arz4[ab]$"
-    open-on-workspace "arz-4"
-}
-window-rule {
-    match app-id="^spotify$"
-    open-on-workspace "arz-5"
-}
-
-// ── Dell pins ──
-window-rule {
-    match app-id="^kitty-dell1$"
-    open-on-workspace "dell-1"
-}
-window-rule {
-    match app-id="^(nemo|org\\.Nemo)$"
-    open-on-workspace "dell-2"
-}
-window-rule {
-    match app-id="^kitty-dell2-yazi$"
-    open-on-workspace "dell-2"
-}
-window-rule {
-    match app-id="^zen-dell3$"
-    open-on-workspace "dell-3"
-}
-window-rule {
-    match app-id="^(DBeaver|dbeaver|jetbrains-dbeaver)$"
-    open-on-workspace "dell-4"
-}
-window-rule {
-    match app-id="^(yaak|com\\.yaak\\.app|Yaak)$"
-    open-on-workspace "dell-4"
-}
-window-rule {
-    match app-id="^discord$"
-    open-on-workspace "dell-5"
-}
-window-rule {
-    match app-id="^Steam$"
-    open-on-workspace "dell-5"
-}
-
-// ── Huawei (main) pins ──
-window-rule {
-    match app-id="^kitty-main1-nvim$"
-    open-on-workspace "main-1"
-}
-window-rule {
-    match app-id="^zen-main1$"
-    open-on-workspace "main-1"
-}
+// Obsidian semi-transparent
 window-rule {
     match app-id="^obsidian$"
     opacity 0.9
-    open-on-workspace "main-2"
-}
-// Excalidraw self-hosted (pending setup) — main-2
-window-rule {
-    match app-id="^excalidraw$"
-    open-on-workspace "main-2"
-}
-window-rule {
-    match app-id="^kitty-main3[ab]$"
-    open-on-workspace "main-3"
 }
 
-// Fallback: unclassed zen-browser → dell-3 (reading/docs)
+// Spotify → Arzopa arz-2
 window-rule {
-    match app-id="^(zen|zen-browser|app\\.zen_browser\\.zen)$"
+    match app-id="^spotify$"
+    open-on-workspace "arz-2"
+}
+
+// Discord → Dell vertical dell-1
+window-rule {
+    match app-id="^discord$"
+    open-on-workspace "dell-1"
+}
+
+// Obsidian → dell-3 (separate rule from the opacity one above)
+window-rule {
+    match app-id="^obsidian$"
     open-on-workspace "dell-3"
 }
 
-// Chromium (webdev / playwright parity) → main-3
+// Zen browser → dell-2 (reading / docs)
+window-rule {
+    match app-id="^zen-browser$"
+    open-on-workspace "dell-2"
+}
+
+// Chromium → main-3 (webdev target / playwright parity)
 window-rule {
     match app-id="^(chromium|Chromium)$"
     open-on-workspace "main-3"
 }
 
-// ── Floating specials ──
+// Tagged kitty instances — dev session and system dashboard
+window-rule {
+    match app-id="^kitty-dev$"
+    open-on-workspace "arz-1"
+}
+window-rule {
+    match app-id="^kitty-sysdash$"
+    open-on-workspace "arz-3"
+}
+
+// Quake-style kitty dropdown (Mod+Shift+Return spawns with --class kitty-dropdown)
 window-rule {
     match app-id="^kitty-dropdown$"
     open-floating true
@@ -306,13 +226,7 @@ window-rule {
     default-window-height { fixed 500; }
 }
 
-// Waybar click-through kitty popups (bluetui, impala, lazydocker, docker ps, etc.)
-window-rule {
-    match app-id="^kitty-(bluetui|impala|lazydocker-popup|docker-ps)$"
-    open-floating true
-    default-column-width { fixed 1200; }
-    default-window-height { fixed 700; }
-}
+// Android Emulator
 window-rule {
     match app-id="^Emulator$"
     open-floating true
@@ -321,12 +235,14 @@ window-rule {
     match title="^(Emulator|Android Emulator).*$"
     open-floating true
 }
+
+// qs-master popup (lost the pin behavior — Niri has no sticky)
 window-rule {
     match title="^qs-master$"
     open-floating true
 }
 
-// ── Games → Huawei, fullscreen ──
+// Games go to the ultrawide, fullscreen
 window-rule {
     match app-id="^(steam_app_.*|gamescope|lutris|heroic)$"
     open-on-output "DP-1"
@@ -374,15 +290,6 @@ binds {
     Mod+Up               { focus-window-up; }
     Mod+Tab              { focus-monitor-next; }
 
-    // ── First/last column (edge escape from centered layouts) ──
-    Mod+Home             { focus-column-first; }
-    Mod+End              { focus-column-last; }
-
-    // ── Monitor jumps (Huawei / Arzopa / Dell) ──
-    Mod+Ctrl+1           { focus-monitor "DP-1"; }
-    Mod+Ctrl+2           { focus-monitor "HDMI-A-1"; }
-    Mod+Ctrl+3           { focus-monitor "HDMI-A-2"; }
-
     // ── Window movement ──
     Mod+Shift+H          { move-column-left; }
     Mod+Shift+L          { move-column-right; }
@@ -393,36 +300,26 @@ binds {
     Mod+Shift+Down       { move-window-down; }
     Mod+Shift+Up         { move-window-up; }
 
-    // ── Move column to first/last ──
-    Mod+Shift+Home       { move-column-to-first; }
-    Mod+Shift+End        { move-column-to-last; }
-
     // ── Move column to another monitor ──
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
     Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
 
-    // ── Scroller column ops ──
+    // ── Scroller column ops (cpiber/hyprscroller parity) ──
     Mod+C                { center-column; }
     Mod+Shift+C          { maximize-column; }
     Mod+Equal            { set-column-width "+10%"; }
     Mod+Minus            { set-column-width "-10%"; }
     Mod+R                { switch-preset-column-width; }
-    Mod+Shift+R          { switch-preset-window-height; }
     Mod+I                { consume-or-expel-window-left; }
     Mod+Shift+I          { consume-or-expel-window-right; }
-    Mod+T                { toggle-column-tabbed-display; }
 
-    // ── Vertical window resize (inside a column / tabbed group) ──
-    Mod+Shift+Equal      { set-window-height "+10%"; }
-    Mod+Shift+Minus      { set-window-height "-10%"; }
-
-    // ── Overview ──
+    // ── Overview (THE feature) ──
     Mod+O                { toggle-overview; }
     Mod+Shift+Tab        { toggle-overview; }
 
-    // ── Workspaces ──
+    // ── Workspaces (per-monitor, Niri-native relative) ──
     Mod+1                { focus-workspace 1; }
     Mod+2                { focus-workspace 2; }
     Mod+3                { focus-workspace 3; }
@@ -464,5 +361,5 @@ binds {
     Alt+Shift+R          { spawn "sh" "-c" "killall -s SIGINT wf-recorder && notify-send 'Recording Saved'"; }
 }
 
-// Monitor configuration (Monique-generated + per-output layout overrides)
+// Monique monitor configuration
 include "monitors.kdl"
